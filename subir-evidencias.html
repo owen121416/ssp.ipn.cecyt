@@ -3,97 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SSP - Subir Evidencias</title>
-  <style>
-    :root {
-      --guinda: #7A003C;
-      --blanco: #ffffff;
-      --gris: #f4f4f4;
-      --negro: #121212;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-    }
-    body {
-      background-color: var(--blanco);
-      color: var(--negro);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    nav {
-      background: #222;
-      padding: 10px;
-      text-align: center;
-      width: 100%;
-    }
-    nav a {
-      color: white;
-      margin: 0 15px;
-      text-decoration: none;
-      font-weight: 600;
-    }
-    header {
-      width: 100%;
-      text-align: center;
-      margin: 2rem 0 1rem;
-    }
-    header h1 {
-      color: var(--guinda);
-      font-size: 2rem;
-    }
-    .container {
-      width: 100%;
-      max-width: 400px;
-      background: var(--gris);
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      margin-bottom: 1rem;
-      color: var(--guinda);
-      font-size: 1.5rem;
-    }
-    form label {
-      display: block;
-      margin: 1rem 0 0.5rem;
-      font-size: 0.9rem;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #ccc;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: var(--guinda);
-      color: var(--blanco);
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #5c002f;
-    }
-    @media screen and (max-width: 480px) {
-      body {
-        padding: 1rem;
-      }
-      header h1 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
+  <title>IPN - SSP Subir Evidencias</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://www.ipn.mx/assets/files/main/img/template/favicon.ico" type="image/x-icon">
 </head>
 <body>
-
   <nav>
     <a href="index.html">Inicio</a>
     <a href="login.html">Iniciar Sesión</a>
@@ -101,6 +16,7 @@
     <a href="dashboard.html">Panel</a>
     <a href="subir-evidencias.html">Evidencias</a>
     <a href="seguimiento.html">Seguimiento</a>
+    <a href="#" id="cerrarSesion">Cerrar Sesión</a>
   </nav>
 
   <header>
@@ -108,16 +24,31 @@
   </header>
 
   <section class="container">
+    <h2>Carga tus Documentos</h2>
     <form action="procesar-evidencia.php" method="POST" enctype="multipart/form-data">
       <label for="evidencia">Selecciona archivo</label>
       <input type="file" id="evidencia" name="evidencia" required>
 
       <label for="comentario">Comentario</label>
-      <textarea id="comentario" name="comentario" rows="4" placeholder="Describe la actividad..."></textarea>
+      <textarea id="comentario" name="comentario" rows="4" placeholder="Describe la actividad o evidencia..."></textarea>
 
       <button type="submit">Subir</button>
     </form>
   </section>
 
+  <script>
+    // Verificar si hay un usuario logueado para proteger la ruta
+    const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo'));
+    if (!usuarioActivo) {
+      window.location.href = 'login.html'; // Redirige si no hay sesión activa
+    }
+
+    // Funcionalidad de cerrar sesión (repetida para cada página que la necesite)
+    document.getElementById('cerrarSesion').addEventListener('click', function(event) {
+      event.preventDefault();
+      localStorage.removeItem('usuarioActivo'); // Elimina la sesión activa
+      window.location.href = 'index.html'; // Redirige al inicio
+    });
+  </script>
 </body>
 </html>

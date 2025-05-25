@@ -3,122 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SSP - Inicio</title>
-  <nav style="background:#222; padding:10px; text-align:center;">
-  <a href="index.html" style="color:white; margin:0 15px;">Inicio</a>
-  <a href="login.html" style="color:white; margin:0 15px;">Iniciar Sesión</a>
-  <a href="registro.html" style="color:white; margin:0 15px;">Registro</a>
-  <a href="dashboard.html" style="color:white; margin:0 15px;">Panel</a>
-  <a href="subir-evidencias.html" style="color:white; margin:0 15px;">Evidencias</a>
-  <a href="seguimiento.html" style="color:white; margin:0 15px;">Seguimiento</a>
-</nav>
-
-  <style>
-    :root {
-      --guinda: #7A003C;
-      --blanco: #ffffff;
-      --gris: #f4f4f4;
-      --negro: #121212;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-    }
-    body {
-      background-color: var(--blanco);
-      color: var(--negro);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    header {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    header h1 {
-      color: var(--guinda);
-      font-size: 2rem;
-    }
-    nav a {
-      margin: 0 0.5rem;
-      text-decoration: none;
-      color: var(--guinda);
-      font-weight: 600;
-    }
-    .container {
-      width: 100%;
-      max-width: 400px;
-      background: var(--gris);
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      margin-bottom: 1rem;
-      color: var(--guinda);
-      font-size: 1.5rem;
-    }
-    form label {
-      display: block;
-      margin: 1rem 0 0.5rem;
-      font-size: 0.9rem;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #ccc;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: var(--guinda);
-      color: var(--blanco);
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #5c002f;
-    }
-    .link {
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    .link a {
-      color: var(--guinda);
-      text-decoration: underline;
-    }
-    @media screen and (max-width: 480px) {
-      body {
-        padding: 1rem;
-      }
-      header h1 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
-
+  <title>IPN - SSP Inicio</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://www.ipn.mx/assets/files/main/img/template/favicon.ico" type="image/x-icon">
 </head>
 <body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="login.html">Iniciar Sesión</a>
+    <a href="registro.html">Registro</a>
+    <a href="dashboard.html">Panel</a>
+    <a href="subir-evidencias.html">Evidencias</a>
+    <a href="seguimiento.html">Seguimiento</a>
+    <a href="#" id="cerrarSesion" style="display:none;">Cerrar Sesión</a> </nav>
+
   <header>
-    <h1>SSP</h1>
-    <nav>
-      <a href="login.html">Iniciar sesión</a>
-      <a href="registro.html">Registrarse</a>
-    </nav>
+    <h1>Sistema de Servicio Social IPN</h1>
   </header>
   <section class="container">
-    <h2>Bienvenido</h2>
+    <h2 id="mensajeBienvenida">Bienvenido</h2>
     <p>Gestiona tu servicio social de forma rápida y eficiente.</p>
-    <div class="link">
+    <div class="link" id="linksLoginRegistro">
       <p>¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
       <p>¿Eres nuevo? <a href="registro.html">Regístrate</a></p>
     </div>
+    <div id="mensajeSesionIniciada" style="text-align: center; display:none;">
+      <p>Ya tienes una sesión iniciada. Ve a tu <a href="dashboard.html">Panel</a>.</p>
+    </div>
   </section>
+
+  <script>
+    const usuarioActivo = JSON.parse(localStorage.getItem('usuarioActivo'));
+    const cerrarSesionBtn = document.getElementById('cerrarSesion');
+    const linksLoginRegistro = document.getElementById('linksLoginRegistro');
+    const mensajeSesionIniciada = document.getElementById('mensajeSesionIniciada');
+    const mensajeBienvenida = document.getElementById('mensajeBienvenida');
+
+    if (usuarioActivo) {
+      cerrarSesionBtn.style.display = 'inline'; // Muestra el botón de cerrar sesión
+      linksLoginRegistro.style.display = 'none'; // Oculta los enlaces de login/registro
+      mensajeSesionIniciada.style.display = 'block'; // Muestra el mensaje de sesión iniciada
+      mensajeBienvenida.textContent = `¡Hola, ${usuarioActivo.nombre}!`; // Mensaje personalizado
+    } else {
+      cerrarSesionBtn.style.display = 'none'; // Asegura que esté oculto si no hay sesión
+    }
+
+    // Funcionalidad de cerrar sesión
+    cerrarSesionBtn.addEventListener('click', function(event) {
+      event.preventDefault();
+      localStorage.removeItem('usuarioActivo'); // Elimina la sesión activa
+      window.location.reload(); // Recarga la página para actualizar la UI
+    });
+  </script>
 </body>
 </html>

@@ -3,98 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SSP - Registro</title>
-  <style>
-    :root {
-      --guinda: #7A003C;
-      --blanco: #ffffff;
-      --gris: #f4f4f4;
-      --negro: #121212;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-    }
-    body {
-      background-color: var(--blanco);
-      color: var(--negro);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    header {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    header h1 {
-      color: var(--guinda);
-      font-size: 2rem;
-    }
-    .container {
-      width: 100%;
-      max-width: 400px;
-      background: var(--gris);
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      margin-bottom: 1rem;
-      color: var(--guinda);
-      font-size: 1.5rem;
-    }
-    form label {
-      display: block;
-      margin: 1rem 0 0.5rem;
-      font-size: 0.9rem;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #ccc;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: var(--guinda);
-      color: var(--blanco);
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #5c002f;
-    }
-    .link {
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    .link a {
-      color: var(--guinda);
-      text-decoration: underline;
-    }
-    @media screen and (max-width: 480px) {
-      body {
-        padding: 1rem;
-      }
-      header h1 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
+  <title>IPN - SSP Registro</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://www.ipn.mx/assets/files/main/img/template/favicon.ico" type="image/x-icon">
 </head>
 <body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="login.html">Iniciar Sesión</a>
+    <a href="registro.html">Registro</a>
+    <a href="dashboard.html">Panel</a>
+    <a href="subir-evidencias.html">Evidencias</a>
+    <a href="seguimiento.html">Seguimiento</a>
+  </nav>
+
   <header>
     <h1>Registro</h1>
   </header>
 
   <section class="container">
-    <form onsubmit="event.preventDefault(); window.location.href='dashboard.html';">
+    <form id="registroForm">
       <label for="nombre">Nombre completo</label>
       <input type="text" id="nombre" required>
       
@@ -105,11 +34,52 @@
       <input type="password" id="password" required>
       
       <button type="submit">Registrarse</button>
+      <p id="mensajeRegistro" style="color: green; text-align: center; margin-top: 10px;"></p>
     </form>
 
     <div class="link">
       <a href="login.html">¿Ya tienes cuenta? Inicia sesión</a>
     </div>
   </section>
+
+  <script>
+    document.getElementById('registroForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Evita el envío del formulario por defecto
+
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const mensajeRegistro = document.getElementById('mensajeRegistro');
+
+      // Simple validación de campos
+      if (nombre === '' || email === '' || password === '') {
+        mensajeRegistro.textContent = 'Por favor, completa todos los campos.';
+        mensajeRegistro.style.color = 'red';
+        return;
+      }
+
+      // Simula el almacenamiento del usuario en localStorage
+      // En un sistema real, aquí enviarías los datos a un servidor para guardarlos en una base de datos
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+      // Verificar si el correo ya existe
+      const usuarioExistente = usuarios.find(user => user.email === email);
+      if (usuarioExistente) {
+        mensajeRegistro.textContent = 'El correo electrónico ya está registrado.';
+        mensajeRegistro.style.color = 'red';
+        return;
+      }
+
+      usuarios.push({ nombre: nombre, email: email, password: password });
+      localStorage.setItem('usuarios', JSON.stringify(usuarios));
+
+      mensajeRegistro.textContent = '¡Registro exitoso! Redirigiendo a Iniciar Sesión...';
+      mensajeRegistro.style.color = 'green';
+
+      setTimeout(() => {
+        window.location.href = 'login.html'; // Redirige al login
+      }, 2000); // Espera 2 segundos antes de redirigir
+    });
+  </script>
 </body>
 </html>

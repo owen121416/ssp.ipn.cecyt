@@ -3,115 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SSP - Login</title>
- 
-
-  <style>
-    :root {
-      --guinda: #7A003C;
-      --blanco: #ffffff;
-      --gris: #f4f4f4;
-      --negro: #121212;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Helvetica Neue', sans-serif;
-    }
-    body {
-      background-color: var(--blanco);
-      color: var(--negro);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
-    header {
-      width: 100%;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    header h1 {
-      color: var(--guinda);
-      font-size: 2rem;
-    }
-    nav a {
-      margin: 0 0.5rem;
-      text-decoration: none;
-      color: var(--guinda);
-      font-weight: 600;
-    }
-    .container {
-      width: 100%;
-      max-width: 400px;
-      background: var(--gris);
-      padding: 2rem;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      margin-bottom: 1rem;
-      color: var(--guinda);
-      font-size: 1.5rem;
-    }
-    form label {
-      display: block;
-      margin: 1rem 0 0.5rem;
-      font-size: 0.9rem;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #ccc;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    button {
-      background-color: var(--guinda);
-      color: var(--blanco);
-      border: none;
-      font-weight: bold;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background-color: #5c002f;
-    }
-    .link {
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    .link a {
-      color: var(--guinda);
-      text-decoration: underline;
-    }
-    @media screen and (max-width: 480px) {
-      body {
-        padding: 1rem;
-      }
-      header h1 {
-        font-size: 1.5rem;
-      }
-    }
-  </style>
-
+  <title>IPN - SSP Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://www.ipn.mx/assets/files/main/img/template/favicon.ico" type="image/x-icon">
 </head>
 <body>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="login.html">Iniciar Sesión</a>
+    <a href="registro.html">Registro</a>
+    <a href="dashboard.html">Panel</a>
+    <a href="subir-evidencias.html">Evidencias</a>
+    <a href="seguimiento.html">Seguimiento</a>
+  </nav>
+
   <header>
     <h1>Iniciar sesión</h1>
   </header>
   <section class="container">
-    <form>
+    <form id="loginForm">
       <label for="email">Correo electrónico</label>
       <input type="email" id="email" required>
       <label for="password">Contraseña</label>
       <input type="password" id="password" required>
       <button type="submit">Entrar</button>
+      <p id="mensajeLogin" style="color: red; text-align: center; margin-top: 10px;"></p>
     </form>
     <div class="link">
       <a href="registro.html">¿No tienes cuenta? Regístrate</a>
     </div>
   </section>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Evita el envío del formulario por defecto
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const mensajeLogin = document.getElementById('mensajeLogin');
+
+      const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+      const usuarioEncontrado = usuarios.find(user => user.email === email && user.password === password);
+
+      if (usuarioEncontrado) {
+        // Simula inicio de sesión exitoso
+        localStorage.setItem('usuarioActivo', JSON.stringify(usuarioEncontrado));
+        mensajeLogin.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
+        mensajeLogin.style.color = 'green';
+        setTimeout(() => {
+          window.location.href = 'dashboard.html'; // Redirige al panel si las credenciales son correctas
+        }, 1000);
+      } else {
+        mensajeLogin.textContent = 'Correo o contraseña incorrectos.';
+        mensajeLogin.style.color = 'red';
+      }
+    });
+  </script>
 </body>
 </html>
